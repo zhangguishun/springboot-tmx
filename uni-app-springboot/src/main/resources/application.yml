@@ -1,0 +1,28 @@
+
+server:
+  port: 8089
+
+mybatis-plus:
+  global-config:
+    banner: false
+
+
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://121.41.115.229:3306/yubin?serverTimezone=GMT%2B8&characterEncoding=utf-8
+    username: yubin
+    password: Azyz7236
+  main:
+    banner-mode: off
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  mvc:
+    static-path-pattern: /images/**
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
