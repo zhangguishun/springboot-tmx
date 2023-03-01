@@ -19,4 +19,7 @@ public interface UserService {
     R Avatar(User user);//头像上传
 
     R Detailed_address(User user); //用户地址  和详细地址
+
+    //修改用户信息
+    R setUserInfo(User user);
 }

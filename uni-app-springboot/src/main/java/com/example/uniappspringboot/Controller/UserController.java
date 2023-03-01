@@ -35,4 +35,7 @@ public class UserController {
 
     @PostMapping("avatar")//头像上传
     public R PostAvatar(User user){return userService.Avatar(user);}
+
+    @PostMapping("/setInfo")
+    public  R PostSetInfo(User user){return userService.setUserInfo(user);}
 }

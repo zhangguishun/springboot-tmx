@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-
     @Override //用户注册信息
     public R Registration(User user) {
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
@@ -107,6 +106,7 @@ public class UserServiceImpl implements UserService {
     public R SelectUserIofo(User user){
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
         lqw.eq(User::getOpenid,user.getOpenid());
+
         R r=new R();
         try {
             User UserInfo =userDao.selectOne(lqw);
@@ -180,6 +180,24 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             r.setCode(String.valueOf(500));
             r.setData(e);
+        }
+        return r;
+    }
+
+    @Override //修改用户信息
+    public R setUserInfo(User user){
+        LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
+        lqw.eq(User::getOpenid,user.getOpenid());
+        User Info =userDao.selectOne(lqw);
+        user.setId(Info.getId());
+        R r =new R();
+        int res=userDao.updateById(user);
+        if(res==1){
+            r.setMsg("修改成功");
+            r.setCode(String.valueOf(200));
+        }else {
+            r.setMsg("修改失败");
+            r.setCode(String.valueOf(203));
         }
         return r;
     }

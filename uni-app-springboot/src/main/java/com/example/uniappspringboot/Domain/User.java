@@ -3,7 +3,6 @@ package com.example.uniappspringboot.Domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.example.uniappspringboot.Config.Time;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,4 +20,5 @@ public class User implements Serializable {//用户信息
     private String password ;//用户密码
     private String telephon;//手机号
     private String headimage;//头像
+    private String qq_mailbox;//QQ邮箱
 }
