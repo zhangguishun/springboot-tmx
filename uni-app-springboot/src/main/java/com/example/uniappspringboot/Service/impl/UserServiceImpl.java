@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
                 r.setCode(String.valueOf(404));
             }else {
                 UserInfo.setAddress(user.getAddress());
-                UserInfo.setDetailed_address(user.getDetailed_address());
+                UserInfo.setDetailedaddress(user.getDetailedaddress());
                 int res= userDao.updateById(UserInfo);
                 r.setCode(String.valueOf(200));
                 r.setMsg("修改成功");
