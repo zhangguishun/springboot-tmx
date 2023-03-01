@@ -16,6 +16,9 @@ public class ShopAddressController {
     @Autowired
     private ShopAddressService shopAddressService;
 
-    @PostMapping()
-    public R postShopAddress(ShopAddress shopAddress){return shopAddressService.setAddress(shopAddress);}
+    @PostMapping("/add")
+    public R postAddShopAddress(ShopAddress shopAddress){return shopAddressService.setAddress(shopAddress);}
+
+    @PostMapping("/del")
+    public R postDelShopAddress(ShopAddress shopAddress){return shopAddressService.delAddress(shopAddress);}
 }
