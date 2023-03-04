@@ -1,7 +1,6 @@
 package com.example.uniappspringboot.Controller;
 
 
-
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Domain.ShopAddress;
 import com.example.uniappspringboot.Service.ShopAddressService;
@@ -16,9 +15,23 @@ public class ShopAddressController {
     @Autowired
     private ShopAddressService shopAddressService;
 
-    @PostMapping("/add")
-    public R postAddShopAddress(ShopAddress shopAddress){return shopAddressService.setAddress(shopAddress);}
+    @PostMapping("/add")//新增
+    public R postAddShopAddress(ShopAddress shopAddress) {
+        return shopAddressService.addAddress(shopAddress);
+    }
 
-    @PostMapping("/del")
-    public R postDelShopAddress(ShopAddress shopAddress){return shopAddressService.delAddress(shopAddress);}
+    @PostMapping("/del")//删除
+    public R postDelShopAddress(ShopAddress shopAddress) {
+        return shopAddressService.delAddress(shopAddress);
+    }
+
+    @PostMapping("/set")//修改
+    public R postSetShopAddress(ShopAddress shopAddress) {
+        return shopAddressService.setAddress(shopAddress);
+    }
+
+    @PostMapping("/sel")//查询
+    public R postSelShopAddress(ShopAddress shopAddress) {
+        return shopAddressService.selAddress(shopAddress);
+    }
 }

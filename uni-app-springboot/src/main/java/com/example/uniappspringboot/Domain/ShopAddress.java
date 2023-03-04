@@ -12,7 +12,7 @@ import java.io.Serializable;
 @TableName("shoppingaddress")
 public class ShopAddress implements Serializable {
     @TableId(type = IdType.AUTO)
-    private Long id ;
+    private Long id;
     private String openid;
     private String consignee;//收货人
     private String cellphonenumber;//手机号
@@ -20,5 +20,6 @@ public class ShopAddress implements Serializable {
     private String city;//市
     private String area;//区 州
     private String detailedaddress;//详细地址
+    private String checked;
 }
 
