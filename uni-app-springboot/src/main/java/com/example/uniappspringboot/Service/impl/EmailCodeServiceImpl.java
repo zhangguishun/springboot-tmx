@@ -61,6 +61,7 @@ public class EmailCodeServiceImpl implements EmailCodeService {
         return iMailService.sendHtmlMail(emailName,emailContent,emailHtml);
     }
 
+
     @Override //删除邮箱验证
     public R delEmail(EmailCode emailCode){
         R r = new R();
