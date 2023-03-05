@@ -3,6 +3,7 @@ package com.example.uniappspringboot.Controller;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Dao.UserDao;
 import com.example.uniappspringboot.Domain.EmailCode;
+import com.example.uniappspringboot.Domain.User;
 import com.example.uniappspringboot.Service.EmailCodeService;
 import com.example.uniappspringboot.Service.IMailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,8 @@ public class EmailCodeController {
     private UserDao userDao;
 
     @PostMapping("/send")
-    public R sendEmail(EmailCode emailCode){return emailCodeService.addEmail(emailCode);}
-
+    public R sendEmail(User user){R res=emailCodeService.addEmail(user);return res;}
     @PostMapping("/login")
     public R loginEmail(EmailCode emailCode){return emailCodeService.delEmail(emailCode);}
-
 
 }
