@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class TokenUtil {
+public class OpenidUtil {
     /**
      * 创建map用于存储所有的令牌
      * <p>

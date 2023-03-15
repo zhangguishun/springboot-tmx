@@ -15,6 +15,9 @@ public class UserController {
     @Autowired //接口
     private UserService userService;
 
+    @PostMapping("/set")
+    public R setUser(User user){return userService.setUser(user);}//token
+
     @PostMapping("/PostReg") //注册用户信息
     public R PostRegistration(User user){return userService.Registration(user);}
 

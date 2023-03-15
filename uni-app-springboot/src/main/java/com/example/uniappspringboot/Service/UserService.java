@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
+
+    R setUser(User user);//注册 (token)
+
     R Registration(User user); //用户注册信息
 
     R PLogin(User user);//登录

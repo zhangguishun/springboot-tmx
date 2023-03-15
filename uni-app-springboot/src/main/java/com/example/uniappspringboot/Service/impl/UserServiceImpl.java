@@ -6,11 +6,13 @@ import com.example.uniappspringboot.Config.Time;
 import com.example.uniappspringboot.Dao.UserDao;
 import com.example.uniappspringboot.Domain.User;
 import com.example.uniappspringboot.Service.UserService;
-import com.example.uniappspringboot.Util.TokenUtil;
+import com.example.uniappspringboot.Util.OpenidUtil;
+import com.example.uniappspringboot.Util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +23,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Override //注册
+    public R setUser(User user){
+        R r=new R();
+        String token= TokenUtils.sign(user);
+       // String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImlkIjoyLCJleHAiOjE2Nzg4MTkzNTN9.LCMtIb59Du1gqqDw0NGjf8MDJqsESCfOQkXsTE1V1LM";
+        //boolean res= TokenUtils.verify(token);
+        r.setData(token);
+        r.setMsg("成功");
+        r.setCode(String.valueOf(200));
+        return r;
+    }
+
     @Override //用户注册信息
     public R Registration(User user) {
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
@@ -30,10 +44,10 @@ public class UserServiceImpl implements UserService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//装换格式
         R r = new R();
         if(GetInfo==null){
-            user.setOpenid(TokenUtil.generateToken(user));
+            user.setOpenid(OpenidUtil.generateToken(user));
             user.setToken(sdf.format(date));
                 userDao.insert(user);
-                r.setData(TokenUtil.generateToken(user));
+                r.setData(OpenidUtil.generateToken(user));
                 r.setMsg("注册成功");
                 r.setCode(String.valueOf(200));
         }else {
@@ -46,9 +60,11 @@ public class UserServiceImpl implements UserService {
 
     @Override //登录
     public R PLogin(User user){
+        System.out.println(user);
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
         lqw.eq(User::getTelephon,user.getTelephon()).eq(User::getPassword,user.getPassword());
         User  list =userDao.selectOne(lqw);
+        System.out.println(list);
         R r = new R();
         if(list==null){
             r.setData("");
@@ -59,7 +75,11 @@ public class UserServiceImpl implements UserService {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//装换格式
             list.setToken(sdf.format(date));
             userDao.updateById(list);
-            r.setData(list.getOpenid());
+            ArrayList arrayList=new ArrayList();
+             arrayList.add(list.getOpenid());
+            String token= TokenUtils.sign(list);
+             arrayList.add(token);
+            r.setData(arrayList);
             r.setMsg("登录成功");
             r.setCode(String.valueOf(200));
         }else {
