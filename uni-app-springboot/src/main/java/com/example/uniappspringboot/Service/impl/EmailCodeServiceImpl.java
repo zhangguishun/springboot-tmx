@@ -8,6 +8,7 @@ import com.example.uniappspringboot.Domain.EmailCode;
 import com.example.uniappspringboot.Domain.User;
 import com.example.uniappspringboot.Service.EmailCodeService;
 import com.example.uniappspringboot.Service.IMailService;
+import com.example.uniappspringboot.Util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +18,16 @@ import static com.example.uniappspringboot.Util.RandomUtil.getRandomNumber;
 
 @Service
 public class EmailCodeServiceImpl implements EmailCodeService {
-
     @Autowired
     private EmailCodeDao emailCodeDao;
-
     @Autowired
     private UserDao userDao;
-
     @Autowired
     private IMailService iMailService;
 
     @Override //新增邮箱
     public R addEmail(User user){
         R r=new R();
-
         LambdaQueryWrapper<User> lqw=new  LambdaQueryWrapper<>();
         lqw.eq(User::getQqmailbox,user.getQqmailbox());
         User list=userDao.selectOne(lqw);//查询用户信息
@@ -44,8 +41,6 @@ public class EmailCodeServiceImpl implements EmailCodeService {
             emailCode.setCode(emailCodes);
             emailCode.setOpenid(list.getOpenid());
             int res=emailCodeDao.insert(emailCode);//验证码存入数据库
-
-
             String accountNumber = list.getUsername();//用户名
             String emailName=list.getQqmailbox();//自己的接受邮箱
             String emailContent="TMX平台邮箱验证码";
@@ -70,14 +65,12 @@ public class EmailCodeServiceImpl implements EmailCodeService {
 
     }
 
-
     @Override //删除邮箱验证
     public R delEmail(EmailCode emailCode){
         R r = new R();
         LambdaQueryWrapper<User> lqw2 = new LambdaQueryWrapper<>();
         lqw2.eq(User::getQqmailbox, emailCode.getOpenid());
         User res = userDao.selectOne(lqw2);
-        System.out.println(res);
         if (res==null){
             r.setCode(String.valueOf(500));
             r.setMsg("用户不存在");
@@ -94,9 +87,12 @@ public class EmailCodeServiceImpl implements EmailCodeService {
                 r.setCode(String.valueOf(203));
                 r.setMsg("失败 ");
             }else {
+                ArrayList data=new ArrayList();
+                 data.add(res.getOpenid());
+                 data.add(TokenUtils.sign(res));
                 r.setCode(String.valueOf(200));
                 r.setMsg("成功");
-                r.setData(res);
+                r.setData(data);
             }
 
         }

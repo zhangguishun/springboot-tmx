@@ -41,6 +41,6 @@ public class YzmCodeController {
         return yzmCodeService.getYzmCode(yzmUserCode);
     }
 
-    @GetMapping("DeletCode")//清除所有验证码记录
+    @GetMapping("/DeletCode")//清除所有验证码记录
     public R DeletCodes(){return yzmCodeService.DeletCode();}
 }

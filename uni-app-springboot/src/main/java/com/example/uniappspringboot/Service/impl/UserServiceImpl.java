@@ -42,14 +42,25 @@ public class UserServiceImpl implements UserService {
         User GetInfo = userDao.selectOne(lqw);
         Date date = new Date();//获取当前标准时间
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//装换格式
+
         R r = new R();
         if(GetInfo==null){
-            user.setOpenid(OpenidUtil.generateToken(user));
-            user.setToken(sdf.format(date));
-                userDao.insert(user);
-                r.setData(OpenidUtil.generateToken(user));
+            String openid=OpenidUtil.generateToken(user);//获取openid
+            user.setOpenid(openid);//插入openid
+            user.setToken(sdf.format(date));//自定义登录失效时间
+            int list= userDao.insert(user);//插入数据
+            if (list==1){
+                LambdaQueryWrapper<User> Lqw=new LambdaQueryWrapper<>();
+                Lqw.eq(User::getOpenid,openid);
+                User newUser =userDao.selectOne(Lqw);//查询刚注册的数据
+                String token= TokenUtils.sign(newUser);//获取请求头token
+                ArrayList data=new ArrayList();//建立一个数组
+                  data.add(openid);
+                  data.add(token);
+                r.setData(data);//返回数据
                 r.setMsg("注册成功");
                 r.setCode(String.valueOf(200));
+            }
         }else {
             r.setData(204);
             r.setMsg("该手机号已经存在");
@@ -60,11 +71,9 @@ public class UserServiceImpl implements UserService {
 
     @Override //登录
     public R PLogin(User user){
-        System.out.println(user);
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
         lqw.eq(User::getTelephon,user.getTelephon()).eq(User::getPassword,user.getPassword());
         User  list =userDao.selectOne(lqw);
-        System.out.println(list);
         R r = new R();
         if(list==null){
             r.setData("");
