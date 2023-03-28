@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override //新增订单
     public R addOrder(Order order) {
-        System.out.println(order);
+       // System.out.println(order);
         R r = new R();
         int res = orderDao.insert(order);
         return getR(order, r, res);
@@ -45,7 +45,6 @@ public class OrderServiceImpl implements OrderService {
         LambdaQueryWrapper<Order> sel = new LambdaQueryWrapper<Order>();
         sel.eq(Order::getOpenid, order.getOpenid());
         ArrayList res = (ArrayList) orderDao.selectList(sel);
-        System.out.println(res);
         if (res.isEmpty()) {
             r.setCode(String.valueOf(203));
             r.setMsg("失败");

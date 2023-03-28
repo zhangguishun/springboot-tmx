@@ -25,4 +25,7 @@ public interface UserService {
 
     //修改用户信息
     R setUserInfo(User user);
+
+    //修改用户信息
+    R selPurview(User user);
 }

@@ -21,4 +21,8 @@ public class Order implements Serializable {
     private String time;//下单实践
     private String amount;//数量
     private String picture;//商品图片
+    private String label;//订单标签
+    private String merchantname;//商家昵称
+    private String status ;//订单状态
+
 }

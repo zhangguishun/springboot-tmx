@@ -9,11 +9,13 @@ import com.example.uniappspringboot.Service.UserService;
 import com.example.uniappspringboot.Util.OpenidUtil;
 import com.example.uniappspringboot.Util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -230,4 +232,34 @@ public class UserServiceImpl implements UserService {
         }
         return r;
     }
+
+    @Override //综合网关于我们
+    public R selPurview(User user){
+        LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
+        lqw.eq(User::getPurview,user.getPurview());
+        ArrayList res= (ArrayList) userDao.selectList(lqw);
+        ArrayList result =new ArrayList();
+        res.forEach((item)->{
+            HashMap<String,String> map=new ManagedMap<>();
+            User value= (User) item;
+            map.put("avatar",value.getHeadimage());
+            map.put("remarks",value.getRemarks());
+            map.put("username",value.getUsername());
+            map.put("Introduction",value.getLntroduction());
+            result.add(map);
+        });
+        R r =new R();
+        if(res.isEmpty()){
+            r.setMsg("查询失败");
+            r.setCode(String.valueOf(203));
+
+        }else {
+            r.setMsg("查询成功");
+            r.setCode(String.valueOf(200));
+            r.setData(result);
+        }
+        return r;
+    }
+
+
 }

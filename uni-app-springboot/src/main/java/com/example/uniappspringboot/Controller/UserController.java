@@ -41,4 +41,10 @@ public class UserController {
 
     @PostMapping("/setInfo")
     public  R PostSetInfo(User user){return userService.setUserInfo(user);}
+
+    @PostMapping("/purview")
+    public  R PostPurview(User user){return userService.selPurview(user);}
+
+
+
 }

@@ -55,12 +55,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //排除拦截，除了注册登录(此时还没token)，其他都拦截
         excludePath.add("/user/PostLogin");  //登录
         excludePath.add("/user/PostReg"); //注册
+        excludePath.add("/user/purview"); //综合网权限（用户信息）
         excludePath.add("/code/GetCode"); //获取验证码
         excludePath.add("/code/YzCode"); //校验
         excludePath.add("/code/DeletCode"); //清除验证码
         excludePath.add("/email/send"); //发送邮箱
         excludePath.add("/email/login"); //邮箱登录
-
+        excludePath.add("/list/selItem");//获取综合网数据列表
         excludePath.add("/img/**");  //静态资源
         excludePath.add("/song/**");  //静态资源
         excludePath.add("/api/getPublicKey");
