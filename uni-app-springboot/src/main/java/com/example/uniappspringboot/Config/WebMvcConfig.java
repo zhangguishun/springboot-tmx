@@ -58,6 +58,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         excludePath.add("/user/purview"); //综合网权限（用户信息）
         excludePath.add("/code/GetCode"); //获取验证码
         excludePath.add("/code/YzCode"); //校验
+        excludePath.add("/upload/avatar");//头像上传
         excludePath.add("/code/DeletCode"); //清除验证码
         excludePath.add("/email/send"); //发送邮箱
         excludePath.add("/email/login"); //邮箱登录
