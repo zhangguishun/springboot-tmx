@@ -61,11 +61,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         excludePath.add("/upload/avatar");//头像上传
         excludePath.add("/code/DeletCode"); //清除验证码
         excludePath.add("/email/send"); //发送邮箱
-
-
-
-        excludePath.add("/software/selSoftGet");//添加
-
+        excludePath.add("/software/selSoftGet");//查询全部
         excludePath.add("/email/login"); //邮箱登录
         excludePath.add("/list/selItem");//获取综合网数据列表
         excludePath.add("/img/**");  //静态资源

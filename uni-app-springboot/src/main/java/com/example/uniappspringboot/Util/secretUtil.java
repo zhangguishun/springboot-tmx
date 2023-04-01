@@ -12,9 +12,9 @@ public class secretUtil {
     //    public static void main(String[] args) {
 //        System.out.println(desEncrypt("F0hE7AgYRNB1ClY1c6PXIQ=="));
 //    }
-    private static String KEY = "1234567890123456";
+    private static String KEY = "316521141919948765606";
 
-    private static String IV = "1234567890123456";
+    private static String IV = "316521141919948765606";
 
     /***
      * 加密

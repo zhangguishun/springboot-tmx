@@ -24,5 +24,4 @@ public class User implements Serializable {//用户信息
     private String remarks;//备注
     private String lntroduction;//简介
     private String purview;//权限
-
 }

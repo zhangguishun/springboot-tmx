@@ -141,6 +141,7 @@ public class UserServiceImpl implements UserService {
         R r=new R();
         try {
             User UserInfo =userDao.selectOne(lqw);
+            UserInfo.setPassword(null);
             r.setData(UserInfo);
             r.setCode(String.valueOf(200));
             r.setMsg("查询成功");
@@ -156,6 +157,7 @@ public class UserServiceImpl implements UserService {
     @Override //查询所有信息
     public R getlogin(User user){
         List<User> users = userDao.selectList(null);
+        users.forEach((item)->{item.setPassword(null);});
         R r = new R();
         r.setData(users);
         r.setCode(String.valueOf(1));

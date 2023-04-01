@@ -27,6 +27,7 @@ public class EmailCodeServiceImpl implements EmailCodeService {
 
     @Override //新增邮箱
     public R addEmail(User user){
+        System.out.println(user);
         R r=new R();
         LambdaQueryWrapper<User> lqw=new  LambdaQueryWrapper<>();
         lqw.eq(User::getQqmailbox,user.getQqmailbox());

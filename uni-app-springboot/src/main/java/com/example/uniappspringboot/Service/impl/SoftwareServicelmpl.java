@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SoftwareServicelmpl implements SoftwareService {
@@ -76,7 +77,8 @@ public class SoftwareServicelmpl implements SoftwareService {
     @Override //查询软件商品(查询多条)
     public R selSoftsGet( ){
         R r =new R();
-        ArrayList res= (ArrayList) softwareDao.selectList(null);
+        List <Software> res = softwareDao.selectList(null);
+        res.forEach((item)->{item.setAddress(null);});
         if (res.isEmpty()){
             r.setCode(String.valueOf(203));
             r.setMsg("查询失败");
