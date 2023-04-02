@@ -1,6 +1,7 @@
 package com.example.uniappspringboot.Service;
 
 import com.example.uniappspringboot.Config.R;
+import com.example.uniappspringboot.Domain.Privileges;
 import com.example.uniappspringboot.Domain.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,4 +29,7 @@ public interface UserService {
 
     //修改用户信息
     R selPurview(User user);
+
+
+
 }

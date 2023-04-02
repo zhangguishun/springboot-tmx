@@ -45,6 +45,4 @@ public class UserController {
     @PostMapping("/purview")
     public  R PostPurview(User user){return userService.selPurview(user);}
 
-
-
 }

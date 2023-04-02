@@ -3,6 +3,7 @@ package com.example.uniappspringboot.Service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Config.Time;
+import com.example.uniappspringboot.Dao.PrivilegesDao;
 import com.example.uniappspringboot.Dao.UserDao;
 import com.example.uniappspringboot.Domain.User;
 import com.example.uniappspringboot.Service.UserService;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PrivilegesDao privilegesDao;
 
     @Override //注册
     public R setUser(User user){
@@ -88,8 +92,9 @@ public class UserServiceImpl implements UserService {
             userDao.updateById(list);
             ArrayList arrayList=new ArrayList();
              arrayList.add(list.getOpenid());
-            String token= TokenUtils.sign(list);
+             String token= TokenUtils.sign(list);
              arrayList.add(token);
+             arrayList.add(list.getPermissions());
             r.setData(arrayList);
             r.setMsg("登录成功");
             r.setCode(String.valueOf(200));
@@ -101,7 +106,7 @@ public class UserServiceImpl implements UserService {
         return r;
     }
 
-    @Override //校验token是否过期
+    @Override //校验token是否过期（时间）
     public R CheckToken(User user){
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
         lqw.eq(User::getOpenid,user.getOpenid());

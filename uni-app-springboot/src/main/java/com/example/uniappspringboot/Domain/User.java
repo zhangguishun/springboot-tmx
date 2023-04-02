@@ -23,5 +23,6 @@ public class User implements Serializable {//用户信息
     private String qqmailbox;//QQ邮箱
     private String remarks;//备注
     private String lntroduction;//简介
-    private String purview;//权限
+    private String purview;//是否显示开发人员
+    private String permissions;//权限
 }

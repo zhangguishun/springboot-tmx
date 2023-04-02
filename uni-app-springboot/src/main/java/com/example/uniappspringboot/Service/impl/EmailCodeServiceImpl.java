@@ -91,6 +91,7 @@ public class EmailCodeServiceImpl implements EmailCodeService {
                 ArrayList data=new ArrayList();
                  data.add(res.getOpenid());
                  data.add(TokenUtils.sign(res));
+                 data.add(res.getPermissions());//返回权限
                 r.setCode(String.valueOf(200));
                 r.setMsg("成功");
                 r.setData(data);
