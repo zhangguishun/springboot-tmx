@@ -19,5 +19,6 @@ public class Privileges implements Serializable {
     private String name;//权限名字
     private String permission;//权限字段
     private String remarks;//备注
+    private String slected;//选择
 
 }

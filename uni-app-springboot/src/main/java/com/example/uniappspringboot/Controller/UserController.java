@@ -21,8 +21,8 @@ public class UserController {
     @PostMapping("/PostReg") //注册用户信息
     public R PostRegistration(User user){return userService.Registration(user);}
 
-    @GetMapping("/getlogin") //查询用户信息
-    public R GetLogin(User user){return userService.getlogin(user);}
+    @GetMapping("/getlogin") //查询用户信息（全部）
+    public R GetLogin(){return userService.getlogin();}
 
     @PostMapping("PostLogin")//登录
     public R PostToLogin(User user){return userService.PLogin(user);}
@@ -41,6 +41,9 @@ public class UserController {
 
     @PostMapping("/setInfo")
     public  R PostSetInfo(User user){return userService.setUserInfo(user);}
+
+    @PostMapping("/selUserPage")
+    public  R postUserPage(User user){return userService.setUserPages(user);}
 
     @PostMapping("/purview")
     public  R PostPurview(User user){return userService.selPurview(user);}

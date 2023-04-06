@@ -18,7 +18,7 @@ public interface UserService {
 
     R SelectUserIofo(User user); //查询单个用户信息
 
-    R getlogin(User user);//查询信息
+    R getlogin();//查询信息
 
     R Avatar(User user);//头像上传
 
@@ -26,6 +26,9 @@ public interface UserService {
 
     //修改用户信息
     R setUserInfo(User user);
+
+    //分页查询
+    R setUserPages(User user);
 
     //修改用户信息
     R selPurview(User user);

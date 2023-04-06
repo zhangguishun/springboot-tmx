@@ -1,6 +1,9 @@
 package com.example.uniappspringboot.Service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.uniappspringboot.Config.MpConfig;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Config.Time;
 import com.example.uniappspringboot.Dao.PrivilegesDao;
@@ -159,13 +162,13 @@ public class UserServiceImpl implements UserService {
         return r;
     }
 
-    @Override //查询所有信息
-    public R getlogin(User user){
+    @Override //查询所有信息（全部）
+    public R getlogin(){
         List<User> users = userDao.selectList(null);
         users.forEach((item)->{item.setPassword(null);});
         R r = new R();
         r.setData(users);
-        r.setCode(String.valueOf(1));
+        r.setCode(String.valueOf(200));
         r.setMsg("查询成功");
         return r;
     }
@@ -239,6 +242,32 @@ public class UserServiceImpl implements UserService {
         }
         return r;
     }
+
+    @Override//分页查询
+    public R setUserPages(User user){
+        R r=new R();
+        int pageNum= Integer.parseInt(user.getRemarks());
+        int pageNums= Integer.parseInt((user.getLntroduction()));
+        IPage page=new Page(pageNum ,pageNums);//创建分页
+       //备注：需要使用拦截器（MpConfig）
+        List<User> res= userDao.selectPage(page,null).getRecords();
+       Long res1=userDao.selectCount(null);
+       ArrayList result=new ArrayList();
+        result.add(res);
+        result.add(res1);
+        System.out.println(res1);
+        res.forEach(item->{item.setPassword(null);});
+        if (res.isEmpty()){
+            r.setMsg("查询失败");
+            r.setCode(String.valueOf(203));
+        }
+
+        r.setMsg("成功");
+        r.setData(result);
+        r.setCode(String.valueOf(200));
+        return r;
+    }
+
 
     @Override //综合网关于我们
     public R selPurview(User user){

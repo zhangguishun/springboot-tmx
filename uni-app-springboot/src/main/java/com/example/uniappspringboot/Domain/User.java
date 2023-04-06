@@ -17,6 +17,7 @@ public class User implements Serializable {//用户信息
     private String address;//地址
     private String detailedaddress;//详细地址
     private String username ;//用户昵称
+    private String sex ;//用户性别
     private String password ;//用户密码
     private String telephon;//手机号
     private String headimage;//头像
@@ -25,4 +26,5 @@ public class User implements Serializable {//用户信息
     private String lntroduction;//简介
     private String purview;//是否显示开发人员
     private String permissions;//权限
+
 }
