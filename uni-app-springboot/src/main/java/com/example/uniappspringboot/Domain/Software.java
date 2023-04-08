@@ -14,4 +14,5 @@ public class Software {
     private String address;//下载地址
     private String content;//软件内容
     private String picture;//展览图
+    private String membership;//是否是会员
 }
