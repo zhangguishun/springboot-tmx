@@ -54,6 +54,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         List<String> excludePath = new ArrayList<>();
         //排除拦截，除了注册登录(此时还没token)，其他都拦截
         excludePath.add("/user/PostLogin");  //登录
+        excludePath.add("/alipay/**");//支付
         excludePath.add("/user/PostReg"); //注册
         excludePath.add("/user/purview"); //综合网权限（用户信息）
         excludePath.add("/code/GetCode"); //获取验证码
@@ -67,7 +68,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         excludePath.add("/img/**");  //静态资源
         excludePath.add("/song/**");  //静态资源
         excludePath.add("/api/getPublicKey");
-
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludePath);

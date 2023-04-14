@@ -44,8 +44,8 @@ public class TokenUtils {
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
             DecodedJWT jwt = verifier.verify(token);
-            System.out.println(jwt.getExpiresAt());
-            System.out.println(jwt.getClaim("id"));
+          //  System.out.println(jwt.getExpiresAt());
+         //   System.out.println(jwt.getClaim("id"));
 
             return true;
         } catch (Exception e){

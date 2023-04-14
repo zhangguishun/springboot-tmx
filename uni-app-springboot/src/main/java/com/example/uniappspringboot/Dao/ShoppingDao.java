@@ -1,9 +1,9 @@
 package com.example.uniappspringboot.Dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.uniappspringboot.Domain.Orders;
+import com.example.uniappspringboot.Domain.Shopping;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface OrdesDao extends BaseMapper<Orders> {
+public interface ShoppingDao extends BaseMapper<Shopping> {
 }

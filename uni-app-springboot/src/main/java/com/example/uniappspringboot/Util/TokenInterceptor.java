@@ -17,7 +17,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
         response.setCharacterEncoding("utf-8");
         String token = request.getHeader("token"); //前端vue将token添加在请求头中
-        System.out.println(token);
+      //  System.out.println(token);
         if(token != null){
             boolean result = TokenUtils.verify(token);
             if(result){
