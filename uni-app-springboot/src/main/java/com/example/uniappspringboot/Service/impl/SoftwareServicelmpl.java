@@ -1,5 +1,6 @@
 package com.example.uniappspringboot.Service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Dao.SoftwareDao;
 import com.example.uniappspringboot.Domain.Software;
@@ -7,7 +8,10 @@ import com.example.uniappspringboot.Service.SoftwareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -18,6 +22,8 @@ public class SoftwareServicelmpl implements SoftwareService {
 
     @Override //添加软件商品
     public R addSoft(Software software){
+        SimpleDateFormat oderShop=new SimpleDateFormat("yyyyMMddHHmmss");
+        software.setSoftid(oderShop.format(new Date()));
         R r =new R();
         int res=softwareDao.insert(software);
         if (res==1){
@@ -75,7 +81,7 @@ public class SoftwareServicelmpl implements SoftwareService {
     }
 
     @Override //查询软件商品(查询多条)
-    public R selSoftsGet( ){
+    public R selSoftsGet(){
         R r =new R();
         List <Software> res = softwareDao.selectList(null);
         res.forEach((item)->{item.setAddress(null);});
@@ -90,4 +96,10 @@ public class SoftwareServicelmpl implements SoftwareService {
         return r;
     }
 
+    public R softDownloaad(Software software){
+        R r=new R();
+        LambdaQueryWrapper<Software> lwq =new LambdaQueryWrapper<>();
+        HashMap<String,String> map =new HashMap<>();
+        return r;
+    }
 }
