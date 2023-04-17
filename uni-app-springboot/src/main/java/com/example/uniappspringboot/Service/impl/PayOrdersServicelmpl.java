@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Dao.PayOrdersDao;
 import com.example.uniappspringboot.Dao.ShoppingDao;
+import com.example.uniappspringboot.Dao.SoftwareDao;
+import com.example.uniappspringboot.Dao.UserDao;
 import com.example.uniappspringboot.Domain.PayOrders;
 import com.example.uniappspringboot.Domain.Shopping;
+import com.example.uniappspringboot.Domain.Software;
+import com.example.uniappspringboot.Domain.User;
 import com.example.uniappspringboot.Service.PayOrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.uniappspringboot.Util.secretUtil.desEncrypt;
+
 
 @Service
 public class PayOrdersServicelmpl implements PayOrdersService {
@@ -21,6 +27,10 @@ public class PayOrdersServicelmpl implements PayOrdersService {
     private PayOrdersDao payOrdersDao;
     @Autowired
     private ShoppingDao shoppingDao;
+    @Autowired
+    private SoftwareDao softwareDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override //新增加订单
     public R addPayOrdersDao(PayOrders payOrders){
@@ -74,7 +84,7 @@ public class PayOrdersServicelmpl implements PayOrdersService {
         }
 
     }
-
+    @Override //删除订单
     public R delPayOdersDao(PayOrders payOrders){
         R r=new R();
         try {
@@ -93,14 +103,14 @@ public class PayOrdersServicelmpl implements PayOrdersService {
         }
 
     }
-
-    public R selPayOdersDao(PayOrders payOrders){
+    @Override //更新订单（单个查询）
+    public R setPayOdersDao(PayOrders payOrders){
         R r=new R();
         try {
             int res=payOrdersDao.updateById(payOrders);
             if (res==1){
                 r.setCode(String.valueOf(200));
-                r.setMsg("删除成功");
+                r.setMsg("更新成功");
             }else {
                 r.setCode(String.valueOf(203));
             }
@@ -110,6 +120,79 @@ public class PayOrdersServicelmpl implements PayOrdersService {
             r.setMsg(String.valueOf(e));
             return r;
         }
+
+    }
+
+    @Override //查询用户所有的订单()
+    public  R selsPayOdersDao(PayOrders payOrders){
+        R r=new R();
+        LambdaQueryWrapper<PayOrders> oderLqw =new LambdaQueryWrapper<>();
+        oderLqw.eq(PayOrders::getProductid,payOrders.getProductid())
+                .eq(PayOrders::getOpenid,payOrders.getOpenid());
+
+        LambdaQueryWrapper<Software> softLqw=new LambdaQueryWrapper<>();
+        softLqw.eq(Software::getSoftid,payOrders.getProductid());
+
+        LambdaQueryWrapper<User> userLqw=new LambdaQueryWrapper<User>();
+        userLqw.eq(User::getOpenid,payOrders.getOpenid());
+
+            Software soft=softwareDao.selectOne(softLqw);
+
+                if (soft.getMembership().equals("Ordinary")){//免费下载
+                  r.setMsg("验证成功");
+                  r.setData(soft.getAddress());
+                  r.setCode(String.valueOf(200));
+                    System.out.printf("免费");
+                  return r;
+            }
+                else if (soft.getMembership().equals("SellingGoods")){//单独售卖
+                try {
+                    PayOrders resOder=payOrdersDao.selectOne(oderLqw);
+                    if ( resOder!=null&&resOder.getPaystate()=="已支付"&&resOder.getPaytime()!=null){
+                        r.setMsg("验证成功");
+                        r.setData(soft.getAddress());
+                        r.setCode(String.valueOf(200));
+                        System.out.printf("单独购买");
+                    }else {
+                        r.setMsg("验证失败");
+                        r.setData("您暂未支付！");
+                        r.setCode(String.valueOf(4041));
+                        System.out.printf("单独购买失败");
+                    }
+                }catch (Exception e){
+                    r.setMsg(String.valueOf(e));
+                }
+                    return r;
+            }
+                else if (soft.getMembership().equals("SVIPusers")) {//会员专享
+                   User resUser=userDao.selectOne(userLqw);
+                 String desRes=desEncrypt(resUser.getPermissions());
+                    System.out.printf(desRes);
+                   try {
+                    if (resUser!=null&&resUser.getPermissions()=="SVIPusers"){
+                        r.setMsg("验证成功");
+                        r.setData(soft.getAddress());
+                        r.setCode(String.valueOf(200));
+                    }else {
+                        r.setMsg("验证失败");
+                        r.setData("您暂未开通会员！");
+                        r.setCode(String.valueOf(4042));
+                        System.out.printf("会员失败");
+                    }
+                }catch (Exception e){
+                    r.setMsg(String.valueOf(e));
+                    r.setCode(String.valueOf(404));
+                    System.out.printf("都不满足");
+                   }
+                    return r;
+
+            }
+                else {
+                    r.setMsg("信息错误");
+                    r.setCode(String.valueOf(203));
+                    return r;
+                }
+
 
     }
 }

@@ -33,5 +33,7 @@ public class PayOrdersController {
     @DeleteMapping("/delShopping")//删除商品
     public R delShoppingService(Shopping shopping){return shoppingService.delShoppingDao(shopping);}
 
+    @PostMapping("/downloadSoft")//校验订单，返回下载地址
+    public R downloadSoftCheck(PayOrders payOrders){return payOrdersService.selsPayOdersDao(payOrders);}
 
 }
