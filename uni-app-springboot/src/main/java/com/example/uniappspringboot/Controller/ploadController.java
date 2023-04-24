@@ -7,16 +7,19 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import ch.qos.logback.core.util.FileUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
+@Api(tags = "图片上传（单独使用）")
 @RestController
 @RequestMapping("/upload")
 public class ploadController {
 	@PostMapping("/head")
+	@ApiOperation("头像上传")
 	public String upload(MultipartFile file,HttpServletRequest req) throws IOException{
 		String fileName= file.getOriginalFilename();
 		InputStream is= file.getInputStream();
@@ -34,7 +37,7 @@ public class ploadController {
 		//6、文件写入到指定路径
 		//FileUtil.writeFromStream(is, fullPath);
 
-		System.out.print(fullPath);
+		//System.out.print(fullPath);
 		//返回文件的访问地址
 		//http://localhost:8086/uploads/test.jpg
 		String http = req.getScheme();

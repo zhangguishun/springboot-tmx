@@ -7,10 +7,7 @@ import com.example.uniappspringboot.Util.TokenInterceptor;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
-import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +45,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
         configurer.setTaskExecutor(new ConcurrentTaskExecutor(Executors.newFixedThreadPool(3)));
         configurer.setDefaultTimeout(30000);
     }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
 
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> excludePath = new ArrayList<>();
@@ -56,6 +63,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
         excludePath.add("/user/PostLogin");  //登录
         excludePath.add("/alipay/**");//支付
         excludePath.add("/user/PostReg"); //注册
+        excludePath.add("/**/*.html");//放开所有.html的资源
+        excludePath.add("/swagger-resources/**");//放开所有.html的资源
+        excludePath.add("/webjars/**");//放开所有.html的资源
+        excludePath.add("/v2/**");//放开所有.html的资源
+        excludePath.add("/swagger-ui.html/**");//放开所有.html的资源
+        excludePath.add("/swagger-ui.html");//放开所有.html的资源
         excludePath.add("/user/purview"); //综合网权限（用户信息）
         excludePath.add("/code/GetCode"); //获取验证码
         excludePath.add("/code/YzCode"); //校验

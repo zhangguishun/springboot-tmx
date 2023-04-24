@@ -1,5 +1,6 @@
 package com.example.uniappspringboot.Service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Dao.PayOrdersDao;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static com.example.uniappspringboot.Util.secretUtil.desEncrypt;
@@ -53,14 +55,15 @@ public class PayOrdersServicelmpl implements PayOrdersService {
                 payOrders.setPaystate("未支付");
                 payOrders.setProductprice(resPrice);
                 payOrders.setMerchantid(shopInfo.getMerchantid());
-                payOrders.setMerchantname(shopInfo.getMerchantname());
-                payOrders.setMerchantphone(shopInfo.getMerchantphone());
-                payOrders.setProductname(shopInfo.getProductname());
-                payOrders.setProductimage(shopInfo.getProductimage());
-                payOrders.setCategory(shopInfo.getCategory());
-                payOrders.setPreferential(shopInfo.getPreferential());
-                payOrders.setMaintype(shopInfo.getMaintype());
-                payOrders.setProductdescription(shopInfo.getProductdescription());
+                payOrders.setMerchantname(shopInfo.getMerchantname());//商家
+                payOrders.setMerchantphone(shopInfo.getMerchantphone());//商家手机号
+                payOrders.setProductname(shopInfo.getProductname());//商品名称
+                payOrders.setProductimage(shopInfo.getProductimage());//商品图片
+                payOrders.setCategory(shopInfo.getCategory());//打折
+                payOrders.setPreferential(shopInfo.getPreferential());//
+                payOrders.setMaintype(shopInfo.getMaintype());//主类
+                payOrders.setProductdescription(shopInfo.getProductdescription());//商品描述
+                payOrders.setPaytype(shopInfo.getPaytype());//支付类型
             int resOrder= payOrdersDao.insert(payOrders);
             if (resOrder==1){
                 r.setCode(String.valueOf(200));
@@ -122,7 +125,6 @@ public class PayOrdersServicelmpl implements PayOrdersService {
         }
 
     }
-
     @Override //查询用户所有的订单()
     public  R selsPayOdersDao(PayOrders payOrders){
         R r=new R();
@@ -142,22 +144,25 @@ public class PayOrdersServicelmpl implements PayOrdersService {
                   r.setMsg("验证成功");
                   r.setData(soft.getAddress());
                   r.setCode(String.valueOf(200));
-                    System.out.printf("免费");
+                  //  System.out.printf("免费");
                   return r;
             }
                 else if (soft.getMembership().equals("SellingGoods")){//单独售卖
                 try {
                     PayOrders resOder=payOrdersDao.selectOne(oderLqw);
-                    if ( resOder!=null&&resOder.getPaystate()=="已支付"&&resOder.getPaytime()!=null){
+                    if ( resOder!=null&&resOder.getPaystate().equals("已支付") &&resOder.getPaytime()!=null){
                         r.setMsg("验证成功");
                         r.setData(soft.getAddress());
                         r.setCode(String.valueOf(200));
-                        System.out.printf("单独购买");
+                    }else if (resOder!=null&&resOder.getPaystate().equals("未支付")){
+                        r.setMsg("已有订单");
+                        r.setData(resOder);
+                        r.setCode(String.valueOf(2001));
                     }else {
                         r.setMsg("验证失败");
-                        r.setData("您暂未支付！");
+                        r.setData("请重新下单！");
                         r.setCode(String.valueOf(4041));
-                        System.out.printf("单独购买失败");
+                        // System.out.printf("单独购买失败");
                     }
                 }catch (Exception e){
                     r.setMsg(String.valueOf(e));
@@ -166,24 +171,22 @@ public class PayOrdersServicelmpl implements PayOrdersService {
             }
                 else if (soft.getMembership().equals("SVIPusers")) {//会员专享
                    User resUser=userDao.selectOne(userLqw);
-                 String desRes=desEncrypt(resUser.getPermissions());
-                    System.out.printf(desRes);
-                   try {
-                    if (resUser!=null&&resUser.getPermissions()=="SVIPusers"){
+                   String desRes=desEncrypt(resUser.getPermissions());
+                   PayOrders resOder=payOrdersDao.selectOne(oderLqw);
+                    System.out.println(resOder);
+                    if (desRes.contains("SVIPusers")==true){
                         r.setMsg("验证成功");
                         r.setData(soft.getAddress());
                         r.setCode(String.valueOf(200));
+                    }else  if (resOder!=null&&resOder.getPaystate().equals("未支付")){
+                        r.setMsg("已有订单");
+                        r.setData(resOder);
+                        r.setCode(String.valueOf(2001));
                     }else {
                         r.setMsg("验证失败");
                         r.setData("您暂未开通会员！");
                         r.setCode(String.valueOf(4042));
-                        System.out.printf("会员失败");
                     }
-                }catch (Exception e){
-                    r.setMsg(String.valueOf(e));
-                    r.setCode(String.valueOf(404));
-                    System.out.printf("都不满足");
-                   }
                     return r;
 
             }

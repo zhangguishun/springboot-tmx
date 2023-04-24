@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Domain.Unicode;
+import io.swagger.annotations.Api;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-
+@Api(tags = "获取Openid(弃用)")
 @CrossOrigin
 @RestController
 @RequestMapping(value = "unicode")

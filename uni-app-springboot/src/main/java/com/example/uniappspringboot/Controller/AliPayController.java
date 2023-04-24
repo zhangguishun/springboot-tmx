@@ -12,8 +12,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.uniappspringboot.Config.AliPayConfig;
 import com.example.uniappspringboot.Dao.PayOrdersDao;
+import com.example.uniappspringboot.Dao.UserDao;
 import com.example.uniappspringboot.Domain.AliPay;
 import com.example.uniappspringboot.Domain.PayOrders;
+import com.example.uniappspringboot.Domain.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +29,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import static com.example.uniappspringboot.Util.secretUtil.desEncrypt;
+import static com.example.uniappspringboot.Util.secretUtil.encrypt;
 
 
+@Api(tags = "支付接口")
 @RestController
 @RequestMapping("/alipay")
 public class AliPayController {
@@ -38,7 +45,13 @@ public class AliPayController {
     private AliPayConfig aliPayConfig;
     @Autowired
     private PayOrdersDao payOrdersDao;
+    @Autowired
+    private UserDao userDao;
+
+
+
     @PostMapping("/pay")
+    @ApiOperation("支付")
     public void pay(PayOrders payOrders, HttpServletResponse httpResponse) throws Exception {
         LambdaQueryWrapper<PayOrders> lwq=new LambdaQueryWrapper<>();
         lwq.eq(PayOrders::getAlipayno,payOrders.getAlipayno()).eq(PayOrders::getOpenid,payOrders.getOpenid());
@@ -73,6 +86,7 @@ public class AliPayController {
     }
 
     @PostMapping("/notify")  // 注意这里必须是POST接口
+    @ApiOperation("支付回调地址")
     public String payNotify(HttpServletRequest request) throws Exception {
         if (request.getParameter("trade_status").equals("TRADE_SUCCESS")) {
            // System.out.println("=========支付宝异步回调========");
@@ -107,11 +121,29 @@ public class AliPayController {
                 queryWrapper.eq(PayOrders::getAlipayno, outTradeNo);
                 PayOrders resultOrders = payOrdersDao.selectOne(queryWrapper);
                 SimpleDateFormat dataT=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//时间
-                if (resultOrders != null) {
-                    resultOrders.setPaystate("已支付");
-                    resultOrders.setPaytime(dataT.format(new Date()));
-                    payOrdersDao.updateById(resultOrders);//
-                    System.out.println("调用成功");
+                resultOrders.setPaystate("已支付");
+                resultOrders.setPaytime(dataT.format(new Date()));
+                payOrdersDao.updateById(resultOrders);//
+                if (resultOrders != null&&resultOrders.getPaytype().equals("1")) {
+                    //商品的订单
+
+
+                }else
+
+                    if (resultOrders != null&&resultOrders.getPaytype().equals("2")){
+                    LambdaQueryWrapper<User> lqwUser=new LambdaQueryWrapper<User>();
+                    lqwUser.eq(User::getOpenid,resultOrders.getOpenid());
+                    User user=userDao.selectOne(lqwUser);
+                    if (user!=null){
+                        String Permissions=desEncrypt(user.getPermissions());
+                        String resiltP=Permissions+","+"SVIPusers";
+                        String setSuot=encrypt(resiltP);
+                       user.setPermissions(setSuot);
+                       int res=userDao.updateById(user);
+                      if (res==1){
+                          System.out.println("会员支付成功");
+                      }
+                    }
                 }
             }
         }

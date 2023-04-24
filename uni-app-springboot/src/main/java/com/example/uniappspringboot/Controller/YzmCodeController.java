@@ -4,6 +4,8 @@ import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Domain.YzmUserCode;
 import com.example.uniappspringboot.Service.YzmCodeService;
 import com.google.code.kaptcha.Producer;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
+@Api(tags = "验证码操作模块")
 @CrossOrigin //开放前端的跨域访问
 @RestController
 @RequestMapping("/code")
@@ -26,6 +28,7 @@ public class YzmCodeController {
     private YzmCodeService yzmCodeService;
 
     @GetMapping("/GetCode") //获取验证码
+    @ApiOperation("获取验证码")
     public ServletOutputStream getimg(HttpServletResponse response) throws IOException {
         String text= producer.createText();//验证码内容
         yzmCodeService.postYzmCode(text);
@@ -37,10 +40,12 @@ public class YzmCodeController {
     }
 
     @PostMapping("/YzCode") //校验验证码
+    @ApiOperation("校验验证码")
     public R postTextCode(YzmUserCode yzmUserCode){
         return yzmCodeService.getYzmCode(yzmUserCode);
     }
 
     @GetMapping("/DeletCode")//清除所有验证码记录
+    @ApiOperation("清除所有验证码记录")
     public R DeletCodes(){return yzmCodeService.DeletCode();}
 }

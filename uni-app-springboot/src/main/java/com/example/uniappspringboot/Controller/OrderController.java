@@ -4,9 +4,10 @@ package com.example.uniappspringboot.Controller;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Domain.Order;
 import com.example.uniappspringboot.Service.OrderService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+@Api(tags = "订单模块（弃用）")
 @CrossOrigin //开放前端的跨域访问
 @RestController
 @RequestMapping("/order")
