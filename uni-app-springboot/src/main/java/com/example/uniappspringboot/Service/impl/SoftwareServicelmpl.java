@@ -2,12 +2,16 @@ package com.example.uniappspringboot.Service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.uniappspringboot.Config.R;
+import com.example.uniappspringboot.Dao.ShoppingDao;
 import com.example.uniappspringboot.Dao.SoftwareDao;
+import com.example.uniappspringboot.Domain.Shopping;
 import com.example.uniappspringboot.Domain.Software;
+import com.example.uniappspringboot.Service.ShoppingService;
 import com.example.uniappspringboot.Service.SoftwareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,21 +22,88 @@ import java.util.List;
 public class SoftwareServicelmpl implements SoftwareService {
     @Autowired
     private SoftwareDao softwareDao;
-
+    @Autowired
+    private ShoppingService shoppingService;
 
     @Override //添加软件商品
     public R addSoft(Software software){
         SimpleDateFormat oderShop=new SimpleDateFormat("yyyyMMddHHmmss");
-        software.setSoftid(oderShop.format(new Date()));
+
         R r =new R();
-        int res=softwareDao.insert(software);
-        if (res==1){
-            r.setCode(String.valueOf(200));
-            r.setMsg("添加成功");
-        }else {
-            r.setCode(String.valueOf(203));
-            r.setMsg("添加失败");
+
+            if (software.getMembership().equals("SVIPusers")){
+            Shopping addShop=new Shopping();
+            addShop.setProductname(software.getTitle());//商品名称
+            addShop.setProductprice(BigDecimal.valueOf(software.getPrice()));//商品价格
+            addShop.setProductdescription(software.getContent());//商品描述
+            addShop.setProductstock(String.valueOf(10000));//库存
+            addShop.setMaintype("2");//支付还是会员支付
+            addShop.setMerchantid("62167e6c-603f-4082-b846-495463f04c93");//商户id
+            addShop.setBusinessstatus("1");//营业状态
+            addShop.setProductimage(software.getPicture());//商品图片
+            addShop.setProductlabel("soft");//商品标签
+            addShop.setCategory("SVIP");//商品品类
+            addShop.setPreferential(String.valueOf(10));//优惠
+            addShop.setSold(String.valueOf(0));//已销售
+
+            R resShop =  shoppingService.addShoppingDao(addShop);//
+            Shopping resShopingData= (Shopping) resShop.getData();
+            software.setSoftid(resShopingData.getProductid());
+            int res=softwareDao.insert(software);
+
+                if (res==1){
+                    r.setCode(String.valueOf(200));
+                    r.setMsg("添加成功");
+                }else {
+                    r.setCode(String.valueOf(203));
+                    r.setMsg("添加失败");
+                }
+
+
+        }else
+            if (software.getMembership().equals("SellingGoods")){
+            Shopping addShop=new Shopping();
+            addShop.setProductname(software.getTitle());//商品名称
+            addShop.setProductprice(BigDecimal.valueOf(software.getPrice()));//商品价格
+            addShop.setProductdescription(software.getContent());//商品描述
+            addShop.setProductstock(String.valueOf(10000));//库存
+            addShop.setMaintype("1");//支付还是会员支付
+            addShop.setMerchantid("62167e6c-603f-4082-b846-495463f04c93");//商户id
+            addShop.setBusinessstatus("1");//营业状态
+            addShop.setProductimage(software.getPicture());//商品图片
+            addShop.setProductlabel("soft");//商品标签
+            addShop.setCategory("soft");//商品品类
+            addShop.setPreferential(String.valueOf(10));//优惠
+            addShop.setSold(String.valueOf(0));//已销售
+
+            R resShop =  shoppingService.addShoppingDao(addShop);
+            Shopping resShopingData= (Shopping) resShop.getData();
+            software.setSoftid(resShopingData.getProductid());
+            int res=softwareDao.insert(software);
+
+                if (res==1){
+                    r.setCode(String.valueOf(200));
+                    r.setMsg("添加成功");
+                }else {
+                    r.setCode(String.valueOf(203));
+                    r.setMsg("添加失败");
+                }
+
+
         }
+            else {
+                software.setSoftid(oderShop.format(new Date()));
+                int res=softwareDao.insert(software);
+                if (res==1){
+                    r.setCode(String.valueOf(200));
+                    r.setMsg("添加成功");
+                }else {
+                    r.setCode(String.valueOf(203));
+                    r.setMsg("添加失败");
+                }
+        }
+
+
         return r;
     }
 
