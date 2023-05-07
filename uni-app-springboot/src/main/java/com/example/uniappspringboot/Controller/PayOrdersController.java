@@ -35,7 +35,7 @@ public class PayOrdersController {
     @ApiOperation("添加商品订单")
     public R addShoppingService(Shopping shopping){return shoppingService.addShoppingDao(shopping);}
 
-    @DeleteMapping("/delShopping")//删除商品
+    @PostMapping("/delShopping")//删除商品
     @ApiOperation("删除商品")
     public R delShoppingService(Shopping shopping){return shoppingService.delShoppingDao(shopping);}
 
