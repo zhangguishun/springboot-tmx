@@ -8,6 +8,7 @@ public class RandomUtil {
     /**
      * 获取长度为 5 的随机字母+数字
      * @return 随机数字
+     * @remake 用途邮箱验证码
      */
     public static String getRandomNumber() {
         char[] nonceChars = new char[5];  //指定长度为6位/自己可以要求设置

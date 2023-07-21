@@ -31,7 +31,7 @@ public class OpenidUtil {
     /**
      * 验证token是否合法
      *
-     * @param token
+     * @param openid
      * @return
      */
     public static boolean verify(String token) {
@@ -41,7 +41,7 @@ public class OpenidUtil {
     /**
      * 根据token获取用户信息
      *
-     * @param token
+     * @param openid
      * @return
      */
     public static User getUser(String token) {
