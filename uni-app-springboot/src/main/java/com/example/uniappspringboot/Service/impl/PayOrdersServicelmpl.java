@@ -1,7 +1,10 @@
 package com.example.uniappspringboot.Service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Dao.PayOrdersDao;
 import com.example.uniappspringboot.Dao.ShoppingDao;
@@ -17,8 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.example.uniappspringboot.Util.secretUtil.desEncrypt;
 
@@ -125,7 +129,7 @@ public class PayOrdersServicelmpl implements PayOrdersService {
         }
 
     }
-    @Override //查询用户所有的订单()
+    @Override //查询用户所有的订单(查询用户自己所有的)
     public  R selsPayOdersDao(PayOrders payOrders){
         R r=new R();
         LambdaQueryWrapper<PayOrders> oderLqw =new LambdaQueryWrapper<>();
@@ -197,5 +201,55 @@ public class PayOrdersServicelmpl implements PayOrdersService {
                 }
 
 
+    }
+
+    @Override //查询所有订单
+    public R selAdminOdersDao(PayOrders payOrders){
+        R r=new R();
+        HashMap<Object,Object> map =new HashMap();//定义Hashmap
+        //总条数
+        Integer listCount= Math.toIntExact(payOrdersDao.selectCount(null));
+        IPage page=new Page(payOrders.getPage() ,payOrders.getLimit());//创建分页
+        QueryWrapper<PayOrders> Lqw =new QueryWrapper<>();
+        //分页查询和模糊查询
+
+
+
+        if (!payOrders.getDataTime().get("start").equals("false")){
+            System.out.println(payOrders.getDataTime().get("start"));
+            System.out.println("时间");
+            List<PayOrders> res= payOrdersDao.selectList(null);
+
+            map.put("list",res);
+
+        }else if(payOrders.getIslike()!=null) {
+            System.out.println("模糊");
+            Lqw.like("productname",payOrders.getIslike());
+            List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
+            if (res.isEmpty()){
+                QueryWrapper<PayOrders> Lqw1 =new QueryWrapper<>();
+                Lqw1.like("productid",payOrders.getIslike());
+                List<PayOrders> res1= payOrdersDao.selectPage(page,Lqw1).getRecords();
+                map.put("list",res1);
+            }else {
+                map.put("list",res);
+            }
+
+        }else {
+            System.out.println("自定义");
+            if (payOrders.getPaystate()!=null){
+                Lqw.eq("paystate",payOrders.getPaystate());
+                List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
+                map.put("list",res);
+            }else {
+                List<PayOrders> res= payOrdersDao.selectPage(page,null).getRecords();
+                map.put("list",res);
+            }
+        }
+        map.put("count",listCount);
+        r.setMsg("查询成功");
+        r.setCode(String.valueOf(200));
+        r.setData(map);
+        return r;
     }
 }

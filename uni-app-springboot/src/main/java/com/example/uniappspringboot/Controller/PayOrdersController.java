@@ -43,4 +43,9 @@ public class PayOrdersController {
     @ApiOperation("软件下载订单校验返回下载地址")
     public R downloadSoftCheck(PayOrders payOrders){return payOrdersService.selsPayOdersDao(payOrders);}
 
+    @PostMapping("/selAdminOders")
+    @ApiOperation("查询所有用户订单信息列表")
+    public R selAdminOders(PayOrders payOrders){return payOrdersService.selAdminOdersDao(payOrders);}
+
+
 }

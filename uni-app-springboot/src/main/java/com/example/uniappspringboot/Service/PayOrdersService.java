@@ -16,4 +16,7 @@ public interface PayOrdersService {
 
     //查询用户所有的订单
     R selsPayOdersDao(PayOrders payOrders);
+
+    //查询所有订单
+    R selAdminOdersDao(PayOrders payOrders);
 }

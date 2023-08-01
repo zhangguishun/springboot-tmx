@@ -1,15 +1,19 @@
 package com.example.uniappspringboot.Domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import springfox.documentation.spring.web.json.Json;
 
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.util.Date;
+import java.util.HashMap;
 
 @Data
 @TableName("payorders")
@@ -56,6 +60,16 @@ public class PayOrders {
     private String  productdescription;//商品详细信息
     @ApiModelProperty("支付类型")
     private String  paytype;//支付类型
-
-
+    //形参参数
+    @ApiModelProperty("分页限制条数")
+    @TableField(exist = false)
+    private Integer limit;
+    @ApiModelProperty("分页页数")
+    @TableField(exist = false)
+    private Integer page;
+    @ApiModelProperty("模糊查询内容")
+    @TableField(exist = false)
+    private String islike;
+    @TableField(exist = false)
+    private HashMap<Object,Object> dataTime;
 }
