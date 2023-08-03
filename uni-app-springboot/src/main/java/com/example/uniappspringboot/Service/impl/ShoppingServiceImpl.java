@@ -73,7 +73,7 @@ public class ShoppingServiceImpl implements ShoppingService {
 
     }
 
-    @Override //删除订单
+    @Override //删除商品
     public R delShoppingDao(Shopping shopping){
         R r=new R();
         try {

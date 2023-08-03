@@ -31,6 +31,10 @@ public class PayOrdersController {
     @ApiOperation("添加支付订单")
     public R addPayOrdersService(PayOrders payOrders){return payOrdersService.addPayOrdersDao(payOrders);}
 
+    @PostMapping("/delPayOdersDao")//删除订单
+    @ApiOperation("删除订单")
+    public R delPayOdersService(PayOrders payOrders){return payOrdersService.delPayOdersDao(payOrders);}
+
     @PostMapping("/addShopping") //新增商品
     @ApiOperation("添加商品订单")
     public R addShoppingService(Shopping shopping){return shoppingService.addShoppingDao(shopping);}
@@ -38,6 +42,7 @@ public class PayOrdersController {
     @PostMapping("/delShopping")//删除商品
     @ApiOperation("删除商品")
     public R delShoppingService(Shopping shopping){return shoppingService.delShoppingDao(shopping);}
+
 
     @PostMapping("/downloadSoft")//校验订单，返回下载地址
     @ApiOperation("软件下载订单校验返回下载地址")

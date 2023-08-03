@@ -95,7 +95,7 @@ public class PayOrdersServicelmpl implements PayOrdersService {
     public R delPayOdersDao(PayOrders payOrders){
         R r=new R();
         try {
-            int res=shoppingDao.deleteById(payOrders.getId());
+            int res=payOrdersDao.deleteById(payOrders.getId());
             if (res==1){
                 r.setCode(String.valueOf(200));
                 r.setMsg("删除成功");
@@ -202,7 +202,6 @@ public class PayOrdersServicelmpl implements PayOrdersService {
 
 
     }
-
     @Override //查询所有订单
     public R selAdminOdersDao(PayOrders payOrders){
         R r=new R();
@@ -212,7 +211,7 @@ public class PayOrdersServicelmpl implements PayOrdersService {
         IPage page=new Page(payOrders.getPage() ,payOrders.getLimit());//创建分页
         QueryWrapper<PayOrders> Lqw =new QueryWrapper<>();
         //分页查询和模糊查询
-        LambdaQueryWrapper<User> userInfo=new LambdaQueryWrapper<>();
+
         if (!payOrders.getDataTime().get("start").equals("false")){
             Lqw.ge("createtime",payOrders.getDataTime().get("start"));
             Lqw.lt("paytime",payOrders.getDataTime().get("end"));
@@ -221,76 +220,101 @@ public class PayOrdersServicelmpl implements PayOrdersService {
             //gt 大于
             //le 小于等于
             List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
-            res.forEach(item->{
-                userInfo.eq(User::getOpenid,item.getOpenid());
+            for (PayOrders re : res) {
+                LambdaQueryWrapper<User> userInfo=new LambdaQueryWrapper<>();
+                userInfo.eq(User::getOpenid,re.getOpenid());
                 User user=userDao.selectOne(userInfo);
                 HashMap<Object,Object> userMap=new HashMap<>();
                 if(user!=null){
                     userMap.put("headimage",user.getHeadimage());
                     userMap.put("username",user.getUsername());
-                    item.setUserInfo(userMap);
+                    userMap.put("telephon",user.getTelephon());
+                    re.setUserInfo(userMap);
                 }
-            });
+
+            }
             map.put("list",res);
-        }else if(payOrders.getIslike()!=null) {
+        }else
+
+            //搜索查询
+
+            if(payOrders.getIslike()!=null) {
             Lqw.like("productname",payOrders.getIslike());
             List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
             if (res.isEmpty()){
                 QueryWrapper<PayOrders> Lqw1 =new QueryWrapper<>();
                 Lqw1.like("productid",payOrders.getIslike());
                 List<PayOrders> res1= payOrdersDao.selectPage(page,Lqw1).getRecords();
-                res1.forEach(item->{
-                    userInfo.eq(User::getOpenid,item.getOpenid());
+                for (PayOrders re : res1) {
+                    LambdaQueryWrapper<User> userInfo=new LambdaQueryWrapper<>();
+                    userInfo.eq(User::getOpenid,re.getOpenid());
                     User user=userDao.selectOne(userInfo);
                     HashMap<Object,Object> userMap=new HashMap<>();
                     if(user!=null){
                         userMap.put("headimage",user.getHeadimage());
                         userMap.put("username",user.getUsername());
-                        item.setUserInfo(userMap);
+                        userMap.put("telephon",user.getTelephon());
+                        re.setUserInfo(userMap);
                     }
-                });
+                }
                 map.put("list",res1);
             }else {
-                res.forEach(item->{
-                    userInfo.eq(User::getOpenid,item.getOpenid());
+                for (PayOrders re : res) {
+                    LambdaQueryWrapper<User> userInfo=new LambdaQueryWrapper<>();
+                    userInfo.eq(User::getOpenid,re.getOpenid());
                     User user=userDao.selectOne(userInfo);
                     HashMap<Object,Object> userMap=new HashMap<>();
                     if(user!=null){
                         userMap.put("headimage",user.getHeadimage());
                         userMap.put("username",user.getUsername());
-                        item.setUserInfo(userMap);
+                        userMap.put("telephon",user.getTelephon());
+                        re.setUserInfo(userMap);
                     }
-                });
+                }
                 map.put("list",res);
             }
         }else {
+
+
+                //支付状态查询
             if (payOrders.getPaystate()!=null){
                 Lqw.eq("paystate",payOrders.getPaystate());
                 List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
-                res.forEach(item->{
-                    userInfo.eq(User::getOpenid,item.getOpenid());
+                for (PayOrders re : res) {
+                    LambdaQueryWrapper<User> userInfo=new LambdaQueryWrapper<>();
+                    userInfo.eq(User::getOpenid,re.getOpenid());
                     User user=userDao.selectOne(userInfo);
                     HashMap<Object,Object> userMap=new HashMap<>();
                     if(user!=null){
                         userMap.put("headimage",user.getHeadimage());
                         userMap.put("username",user.getUsername());
-                        item.setUserInfo(userMap);
+                        userMap.put("telephon",user.getTelephon());
+                        re.setUserInfo(userMap);
                     }
-                });
+                }
                 map.put("list",res);
             }else {
+
+
+
+                //全部查询
                 List<PayOrders> res= payOrdersDao.selectPage(page,null).getRecords();
-                res.forEach(item->{
-                    userInfo.eq(User::getOpenid,item.getOpenid());
-                    User user=userDao.selectOne(userInfo);
-                    HashMap<Object,Object> userMap=new HashMap<>();
-                    if(user!=null){
-                        userMap.put("headimage",user.getHeadimage());
-                        userMap.put("username",user.getUsername());
-                        item.setUserInfo(userMap);
-                    }
-                });
+                 for (PayOrders re : res) {
+                     LambdaQueryWrapper<User> userInfo=new LambdaQueryWrapper<>();
+                     userInfo.eq(User::getOpenid,re.getOpenid());
+                     User user=userDao.selectOne(userInfo);
+                     HashMap<Object,Object> userMap=new HashMap<>();
+                     if(user!=null){
+                         userMap.put("headimage",user.getHeadimage());
+                         userMap.put("username",user.getUsername());
+                         userMap.put("telephon",user.getTelephon());
+                         re.setUserInfo(userMap);
+                     }
+
+                 }
+
                 map.put("list",res);
+
             }
         }
         map.put("count",listCount);
