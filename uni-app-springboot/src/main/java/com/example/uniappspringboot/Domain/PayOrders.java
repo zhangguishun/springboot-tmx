@@ -4,15 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import springfox.documentation.spring.web.json.Json;
 
-import java.math.BigDecimal;
-import java.sql.Array;
-import java.util.Date;
 import java.util.HashMap;
 
 @Data
@@ -72,4 +67,7 @@ public class PayOrders {
     private String islike;
     @TableField(exist = false)
     private HashMap<Object,Object> dataTime;
+    @TableField(exist = false)
+    private HashMap<Object,Object> userInfo;
+
 }

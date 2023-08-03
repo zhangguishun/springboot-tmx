@@ -212,37 +212,84 @@ public class PayOrdersServicelmpl implements PayOrdersService {
         IPage page=new Page(payOrders.getPage() ,payOrders.getLimit());//创建分页
         QueryWrapper<PayOrders> Lqw =new QueryWrapper<>();
         //分页查询和模糊查询
-
-
-
+        LambdaQueryWrapper<User> userInfo=new LambdaQueryWrapper<>();
         if (!payOrders.getDataTime().get("start").equals("false")){
-            System.out.println(payOrders.getDataTime().get("start"));
-            System.out.println("时间");
-            List<PayOrders> res= payOrdersDao.selectList(null);
-
+            Lqw.ge("createtime",payOrders.getDataTime().get("start"));
+            Lqw.lt("paytime",payOrders.getDataTime().get("end"));
+            //ge 大于等于
+            //lt 小于
+            //gt 大于
+            //le 小于等于
+            List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
+            res.forEach(item->{
+                userInfo.eq(User::getOpenid,item.getOpenid());
+                User user=userDao.selectOne(userInfo);
+                HashMap<Object,Object> userMap=new HashMap<>();
+                if(user!=null){
+                    userMap.put("headimage",user.getHeadimage());
+                    userMap.put("username",user.getUsername());
+                    item.setUserInfo(userMap);
+                }
+            });
             map.put("list",res);
-
         }else if(payOrders.getIslike()!=null) {
-            System.out.println("模糊");
             Lqw.like("productname",payOrders.getIslike());
             List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
             if (res.isEmpty()){
                 QueryWrapper<PayOrders> Lqw1 =new QueryWrapper<>();
                 Lqw1.like("productid",payOrders.getIslike());
                 List<PayOrders> res1= payOrdersDao.selectPage(page,Lqw1).getRecords();
+                res1.forEach(item->{
+                    userInfo.eq(User::getOpenid,item.getOpenid());
+                    User user=userDao.selectOne(userInfo);
+                    HashMap<Object,Object> userMap=new HashMap<>();
+                    if(user!=null){
+                        userMap.put("headimage",user.getHeadimage());
+                        userMap.put("username",user.getUsername());
+                        item.setUserInfo(userMap);
+                    }
+                });
                 map.put("list",res1);
             }else {
+                res.forEach(item->{
+                    userInfo.eq(User::getOpenid,item.getOpenid());
+                    User user=userDao.selectOne(userInfo);
+                    HashMap<Object,Object> userMap=new HashMap<>();
+                    if(user!=null){
+                        userMap.put("headimage",user.getHeadimage());
+                        userMap.put("username",user.getUsername());
+                        item.setUserInfo(userMap);
+                    }
+                });
                 map.put("list",res);
             }
-
         }else {
-            System.out.println("自定义");
             if (payOrders.getPaystate()!=null){
                 Lqw.eq("paystate",payOrders.getPaystate());
                 List<PayOrders> res= payOrdersDao.selectPage(page,Lqw).getRecords();
+                res.forEach(item->{
+                    userInfo.eq(User::getOpenid,item.getOpenid());
+                    User user=userDao.selectOne(userInfo);
+                    HashMap<Object,Object> userMap=new HashMap<>();
+                    if(user!=null){
+                        userMap.put("headimage",user.getHeadimage());
+                        userMap.put("username",user.getUsername());
+                        item.setUserInfo(userMap);
+                    }
+                });
                 map.put("list",res);
             }else {
                 List<PayOrders> res= payOrdersDao.selectPage(page,null).getRecords();
+                res.forEach(item->{
+                    userInfo.eq(User::getOpenid,item.getOpenid());
+                    User user=userDao.selectOne(userInfo);
+                    HashMap<Object,Object> userMap=new HashMap<>();
+                    if(user!=null){
+                        userMap.put("headimage",user.getHeadimage());
+                        userMap.put("username",user.getUsername());
+                        item.setUserInfo(userMap);
+                    }
+                });
                 map.put("list",res);
             }
         }
