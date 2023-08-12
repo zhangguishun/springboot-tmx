@@ -1,6 +1,7 @@
 package com.example.uniappspringboot.Domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -9,6 +10,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 
 @Data
 @TableName("shopping")
@@ -52,4 +54,16 @@ public class Shopping {
     private String maintype;//分类
     @ApiModelProperty("支付类型")
     private String paytype;//支付类型
+    @ApiModelProperty("查询限制条数")
+    @TableField(exist = false)
+    private Integer limit;
+    @ApiModelProperty("查询分页页数")
+    @TableField(exist = false)
+    private Integer page;
+    @ApiModelProperty("查询时间段")
+    @TableField(exist = false)
+    private HashMap<Object,Object> dataTime;
+    @ApiModelProperty("查询搜索内容")
+    @TableField(exist = false)
+    private String islike;
 }

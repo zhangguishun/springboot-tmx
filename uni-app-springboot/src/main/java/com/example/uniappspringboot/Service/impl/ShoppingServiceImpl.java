@@ -1,6 +1,9 @@
 package com.example.uniappspringboot.Service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Dao.ShoppingDao;
 import com.example.uniappspringboot.Dao.UserDao;
@@ -12,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 
 /**
  * 商品接口
@@ -93,4 +99,67 @@ public class ShoppingServiceImpl implements ShoppingService {
             return r;
         }
     }
+
+    @Override //修改商品
+    public R setShoppingDao(Shopping shopping){
+        R r=new R();
+        try {
+            int res= shoppingDao.updateById(shopping);
+            if (res==1){
+                r.setCode(String.valueOf(200));
+                r.setMsg("修改成功");
+                return r;
+            }else {
+                r.setCode(String.valueOf(203));
+                r.setMsg("修改失败");
+                return r;
+            }
+        }catch (Exception e){
+            r.setCode(String.valueOf(500));
+            r.setMsg(String.valueOf(e));
+            return r;
+        }
+    }
+
+    @Override //查询商品 全部
+    public R selShoppingDao(Shopping shopping){
+        R r=new R();
+        HashMap<Object,Object> map =new HashMap();//定义Hashmap
+        //总条数
+        Integer listCount= Math.toIntExact(shoppingDao.selectCount(null));
+        IPage page=new Page(shopping.getPage() ,shopping.getLimit());//创建分页
+        map.put("count",listCount);
+        //ge 大于等于
+        //lt 小于
+        //gt 大于
+        //le 小于等于
+        try {
+            //搜索查询
+            if(!shopping.getDataTime().get("start").equals("false")){
+                QueryWrapper<Shopping> Lqw =new QueryWrapper<>();
+                Lqw.ge("createtime",shopping.getDataTime().get("start"));
+                Lqw.lt("createtime",shopping.getDataTime().get("end"));
+                List<Shopping> res=shoppingDao.selectPage(page,Lqw).getRecords();
+                map.put("list",res);
+                r.setMsg("查询成功");
+                r.setData(map);
+                r.setCode(String.valueOf(200));
+            }else
+            //日期条件查询
+            if(shopping.getIslike()!=null){
+
+            }
+            //全部查询
+            else {
+
+            }
+            return r;
+        }catch (Exception e){
+            r.setCode(String.valueOf(500));
+            r.setMsg(String.valueOf(e));
+            return r;
+        }
+    }
+
+
 }

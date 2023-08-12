@@ -9,4 +9,11 @@ public interface ShoppingService {
 
     //删除订单
     R delShoppingDao(Shopping shopping);
+
+
+    //修改商品
+    R setShoppingDao(Shopping shopping);
+
+    //查询商品
+    R selShoppingDao(Shopping shopping);
 }
