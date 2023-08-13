@@ -1,9 +1,10 @@
 package com.example.uniappspringboot.Service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.uniappspringboot.Config.MpConfig;
 import com.example.uniappspringboot.Config.R;
 import com.example.uniappspringboot.Config.Time;
 import com.example.uniappspringboot.Dao.PrivilegesDao;
@@ -16,11 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -226,7 +225,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override //修改用户信息
-    public R setUserInfo(User user){
+    public R setUserInfo(User user) throws IOException {
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
         lqw.eq(User::getOpenid,user.getOpenid());
         User Info =userDao.selectOne(lqw);
@@ -255,7 +254,6 @@ public class UserServiceImpl implements UserService {
        ArrayList result=new ArrayList();
         result.add(res);
         result.add(res1);
-        System.out.println(res1);
         res.forEach(item->{item.setPassword(null);});
         if (res.isEmpty()){
             r.setMsg("查询失败");

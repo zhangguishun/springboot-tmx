@@ -5,6 +5,8 @@ import com.example.uniappspringboot.Domain.Privileges;
 import com.example.uniappspringboot.Domain.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 public interface UserService {
 
 
@@ -25,7 +27,7 @@ public interface UserService {
     R Detailed_address(User user); //用户地址  和详细地址
 
     //修改用户信息
-    R setUserInfo(User user);
+    R setUserInfo(User user) throws IOException;
 
     //分页查询
     R setUserPages(User user);

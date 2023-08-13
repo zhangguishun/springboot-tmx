@@ -1,16 +1,20 @@
 package com.example.uniappspringboot.Domain;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import java.io.Serializable;
 
+
 @Data
-@TableName("user")
+@TableName(value = "user",autoResultMap = true)
 @ApiModel("用户字典")
 public class User implements Serializable {//用户信息
     @TableId(type = IdType.AUTO)
@@ -44,5 +48,8 @@ public class User implements Serializable {//用户信息
     private String purview;//是否显示开发人员
     @ApiModelProperty("权限")
     private String permissions;//权限
+    @ApiModelProperty("地址信息")
+    @TableField(typeHandler = FastjsonTypeHandler.class)
+    public JSONObject coordinate;
 
 }

@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Api(tags = "用户信息")
 @CrossOrigin //开放前端的跨域访问
 @RestController
@@ -51,7 +53,7 @@ public class UserController {
 
     @PostMapping("/setInfo")
     @ApiOperation("修改用户信息(PC)")
-    public  R PostSetInfo(User user){return userService.setUserInfo(user);}
+    public  R PostSetInfo(User user) throws IOException {return userService.setUserInfo(user);}
 
     @PostMapping("/selUserPage")
     @ApiOperation("后台用户查询（分页PC）")
