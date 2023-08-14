@@ -1,8 +1,7 @@
 package com.example.uniappspringboot.Service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.uniappspringboot.Config.R;
@@ -266,7 +265,6 @@ public class UserServiceImpl implements UserService {
         return r;
     }
 
-
     @Override //综合网关于我们
     public R selPurview(User user){
         LambdaQueryWrapper<User> lqw =new LambdaQueryWrapper<User>();
@@ -295,5 +293,16 @@ public class UserServiceImpl implements UserService {
         return r;
     }
 
+    @Override //查询所有用户坐标
+    public R selCoordinate(){
+        R r = new R();
+        QueryWrapper<User> queryWrapper =new QueryWrapper<>();
+        queryWrapper.select("coordinate","openid","username");
+        ArrayList users = (ArrayList) userDao.selectList(queryWrapper);
+        r.setCode(String.valueOf(200));
+        r.setMsg("查询成功");
+        r.setData(users);
+        return r;
+    }
 
 }

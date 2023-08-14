@@ -63,4 +63,7 @@ public class UserController {
     @ApiOperation("综合网关于我们展示人员")
     public  R PostPurview(User user){return userService.selPurview(user);}
 
+    @GetMapping("/coordinate")
+    @ApiOperation("查询所有坐标点")
+    public R GetCoordinate() throws IOException{return userService.selCoordinate();}
 }

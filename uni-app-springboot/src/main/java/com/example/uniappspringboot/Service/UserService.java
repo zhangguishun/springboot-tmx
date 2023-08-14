@@ -36,5 +36,6 @@ public interface UserService {
     R selPurview(User user);
 
 
-
+    //查询所有用户坐标
+    R selCoordinate();
 }
