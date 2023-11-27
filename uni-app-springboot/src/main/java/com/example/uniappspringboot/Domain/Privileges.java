@@ -26,7 +26,7 @@ public class Privileges implements Serializable {
     private String permission;//权限字段
     @ApiModelProperty("备注")
     private String remarks;//备注
-    @ApiModelProperty("选中状态（PC）")
+    @ApiModelProperty("选择")
     private String slected;//选择
 
 }

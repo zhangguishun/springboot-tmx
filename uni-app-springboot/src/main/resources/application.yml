@@ -12,9 +12,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://121.41.115.229:3306/yubin?serverTimezone=GMT%2B8&characterEncoding=utf-8
-    username: yubin
-    password: Azyz7236
+    url: jdbc:mysql://sqlpub.com:3306/tmxciao?serverTimezone=GMT%2B8&characterEncoding=utf-8
+    username: tmxciao
+    password: fb0361f098b8ce92
   main:
     banner-mode: off
   servlet:
