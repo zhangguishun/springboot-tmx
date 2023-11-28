@@ -56,11 +56,19 @@ public class AliPayController {
         LambdaQueryWrapper<PayOrders> lwq=new LambdaQueryWrapper<>();
         lwq.eq(PayOrders::getAlipayno,payOrders.getAlipayno()).eq(PayOrders::getOpenid,payOrders.getOpenid());
         PayOrders Order=payOrdersDao.selectOne(lwq);
+//        System.out.println("执行调用订单了");
+//        System.out.println(Order);
         if (Order==null){
 
         }else {
-            AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, aliPayConfig.getAppId(),
-                    aliPayConfig.getAppPrivateKey(), FORMAT, CHARSET, aliPayConfig.getAlipayPublicKey(), SIGN_TYPE);
+            AlipayClient alipayClient = new DefaultAlipayClient(
+                    GATEWAY_URL,
+                    aliPayConfig.getAppId(),
+                    aliPayConfig.getAppPrivateKey(),
+                    FORMAT,
+                    CHARSET,
+                    aliPayConfig.getAlipayPublicKey(),
+                    SIGN_TYPE);
             // 2. 创建 Request并设置Request参数
             AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();  // 发送请求的 Request类
             request.setNotifyUrl(aliPayConfig.getNotifyUrl());
