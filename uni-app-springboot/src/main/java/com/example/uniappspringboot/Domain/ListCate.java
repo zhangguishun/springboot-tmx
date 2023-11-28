@@ -14,6 +14,8 @@ public class ListCate {
     @TableId(type = IdType.AUTO)
     @ApiModelProperty("id")
     private Integer id;
-    @ApiModelProperty("昵称")
+    @ApiModelProperty("分类昵称")
     private String name;
+    @ApiModelProperty("分类图标")
+    private String image;
 }
