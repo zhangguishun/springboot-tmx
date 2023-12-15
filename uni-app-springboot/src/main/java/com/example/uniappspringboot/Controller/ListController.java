@@ -31,17 +31,36 @@ public class ListController {
     @ApiOperation("删除站点数据")
     public R PostDelItem(ListItem listItem){return listService.delList(listItem);}
 
+    /**
+     * 修改站点数据
+     *
+     * @param listItem 要修改的数据
+     * @return 修改结果
+     */
     @PostMapping("/setItem")
     @ApiOperation("修改站点数据")
     public R PostSetItem(ListItem listItem){return listService.setList(listItem);}
 
 
+    /**
+     * 新增站点分类
+     *
+     * @param listCate 分类信息
+     * @return 返回操作结果
+     */
     @PostMapping("/addCate")
     @ApiOperation("新增站点分类")
     public R PostAddCate(ListCate listCate){return listService.addCate(listCate);}
 
+    /**
+     * 修改站点分类
+     *
+     * @param listCate 分类信息
+     * @return 修改结果
+     */
     @PostMapping("/setCate")
     @ApiOperation("修改站点分类")
     public R PostSetCate(ListCate listCate){return listService.setCate(listCate);}
+
 
 }
